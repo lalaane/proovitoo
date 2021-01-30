@@ -1,36 +1,33 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
-
-// const data = [
-// 	{ id: 1, name: 'Bruce' },
-// 	{ id: 3, name: 'Martin' },
-// 	{ id: 2, name: 'Andrew' },
-// ];
+import ReactDOM from 'react-dom';
 
 /**
  * Nothing interesting, just render...
  */
 function Table({ data, sortByKey }) {
-	const renderRow = ({ name }, idx) => (
+	const renderRow = ({ id, firstname }, idx) => (
 		<tr key={idx}>
-			<td>{name}</td>
+			<td>{id}</td>
+			<td>{firstname}</td>
 		</tr>
 	);
 
 	return (
 		<table>
 			<tr>
-				<th onClick={sortByKey('name')}>Name</th>
+				<th onClick={sortByKey('id')}>ID</th>
+				<th onClick={sortByKey('firstname')}>Name</th>
 			</tr>
 			{data.data.map(renderRow)}
 		</table>
 	);
 }
 
-class Test extends React.Component {
+class Container extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			data: null,
 			sort: {
 				key: undefined,
 				// 0 - not ordering
@@ -41,6 +38,17 @@ class Test extends React.Component {
 		};
 
 		this.sortByKey = this.sortByKey.bind(this);
+	}
+
+	componentDidMount() {
+		fetch('http://proovitoo.twn.ee/api/list.json')
+			.then(res => res.json())
+			.then(
+				data => {
+					this.setState({ data: data.list });
+				},
+				error => console.log(error)
+			);
 	}
 
 	sortedData() {
@@ -83,6 +91,6 @@ class Test extends React.Component {
 	}
 }
 
-export default Test;
+ReactDOM.render(<Container />, document.getElementById('root'));
 
-// ReactDOM.render(<Test data={data} />, document.getElementById('container'));
+export default Container;
