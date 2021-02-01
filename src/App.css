@@ -132,6 +132,7 @@ thead {
 	text-transform: uppercase;
 	color: var(--accentColor);
 	font-weight: 600;
+	cursor: pointer;
 }
 td {
 	cursor: pointer;

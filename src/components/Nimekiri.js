@@ -4,6 +4,7 @@ import { dob } from '../helpers';
 const Nimekiri = () => {
 	const [data, setData] = useState(null);
 	const [sorting, setSorting] = useState({ key: undefined, order: 0 });
+	const [originalData, setOriginalData] = useState(null);
 
 	useEffect(() => {
 		async function fetchData() {
@@ -11,15 +12,13 @@ const Nimekiri = () => {
 			let dataa = await res.json();
 			let data = dataa.list;
 			setData({ data });
+			setOriginalData({ data });
 		}
 		fetchData();
 	}, []);
 
 	const sortStrings = keyy => {
-		const { key, order } = sorting;
-		let sorted = [...data.data];
-		if (order === 0) {
-			console.log('key', key);
+		const ascSort = () => {
 			sorted.sort((a, b) => {
 				let valueA = a[keyy].toLowerCase();
 				let valueB = b[keyy].toLowerCase();
@@ -34,29 +33,44 @@ const Nimekiri = () => {
 			});
 			setSorting({ key: keyy, order: 1 });
 			return sorted;
-		}
-		if (order === 1) {
-			console.log('key', key);
-			sorted.sort((a, b) => {
-				let valueA = a[keyy].toLowerCase();
-				let valueB = b[keyy].toLowerCase();
-				if (valueA > valueB) {
-					return -1;
-				}
-				if (valueA < valueB) {
-					return 1;
-				}
-				// values are equal
-				return 0;
-			});
-			setSorting({ key: keyy, order: 0 });
+		};
+		const { key, order } = sorting;
+		let sorted = [...data.data];
+		if (key === keyy) {
+			if (order === 0) {
+				sorted = ascSort();
+				return sorted;
+			}
+			if (order === 1) {
+				console.log('key', key);
+				sorted.sort((a, b) => {
+					let valueA = a[keyy].toLowerCase();
+					let valueB = b[keyy].toLowerCase();
+					if (valueA > valueB) {
+						return -1;
+					}
+					if (valueA < valueB) {
+						return 1;
+					}
+					// values are equal
+					return 0;
+				});
+				setSorting({ key: keyy, order: 2 });
+				return sorted;
+			}
+			if (order === 2) {
+				const { data } = originalData;
+				setSorting({ key: keyy, order: 0 });
+				return data;
+			}
+		} else {
+			sorted = ascSort();
 			return sorted;
 		}
 	};
 
 	const sortSmth = keyy => {
 		const data = sortStrings(keyy);
-		console.log('dataaaa', data);
 		setData({ data });
 	};
 
@@ -66,7 +80,13 @@ const Nimekiri = () => {
 			<table>
 				<thead>
 					<tr>
-						<th onClick={() => sortSmth('firstname')}>eesnimi</th>
+						<th
+							onClick={() => {
+								sortSmth('firstname');
+							}}
+						>
+							eesnimi
+						</th>
 						<th onClick={() => sortSmth('surname')}>perekonnanimi</th>
 						<th onClick={() => sortSmth('sex')}>sugu</th>
 						<th>sünnikuupäev</th>
