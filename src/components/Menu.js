@@ -14,7 +14,7 @@ export default function Menu() {
 					</NavLink>
 				</li>
 				<li className='menuLink'>
-					<NavLink className='navLink' to='/article'>
+					<NavLink className={window.location.pathname === '/article' ? 'active navLink' : 'navLink'} to='/article'>
 						Artikkel
 					</NavLink>
 				</li>

@@ -71,6 +71,11 @@ a:hover {
 	font-weight: 600;
 }
 
+.navLink.active {
+	color: var(--textAccent);
+	font-weight: 600;
+}
+
 .container {
 	display: grid;
 	padding-bottom: 3.75rem;

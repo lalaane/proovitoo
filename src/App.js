@@ -1,9 +1,9 @@
 import './App.css';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Menu from './components/Menu';
 import Article from './components/Article';
 import Nimekiri from './components/Nimekiri';
-// import Container from './components/Test';
 
 function App() {
 	return (
@@ -21,9 +21,6 @@ function App() {
 							<Route path='/list'>
 								<Nimekiri />
 							</Route>
-							{/* <Route path='/test'>
-								<Container />
-							</Route> */}
 							<Route path='/'>
 								<Redirect to='/list' />
 							</Route>
