@@ -3,6 +3,7 @@
 	--lightBg: #efefef;
 	--textMain: #000000;
 	--lighterText: #333333;
+	--lightText: #707070;
 	--textAccent: #14cc76;
 	--accentColor: #ff57a2;
 }
@@ -190,6 +191,43 @@ tr:not(:last-of-type) {
 
 .additionalPic img {
 	max-width: 100%;
+}
+
+/* pagination */
+.pageNums {
+	list-style: none;
+	color: var(--lightText);
+	display: flex;
+}
+
+.pageNums li {
+	margin: 0.3rem;
+	height: 2rem;
+	width: 2rem;
+	cursor: pointer;
+	font-weight: 600;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pageNums li:hover {
+	border: var(--lightText) 2px solid;
+}
+
+.pageNums li.activeNum {
+	color: var(--accentColor);
+}
+.pageBtns {
+	height: 2rem;
+	width: 2rem;
+	border-radius: 50%;
+	background-color: var(--accentColor);
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* loader from loading.io/css */

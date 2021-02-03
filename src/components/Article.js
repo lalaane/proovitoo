@@ -10,7 +10,7 @@ const Article = () => {
 	}, []);
 
 	if (data === null) {
-		return <div class='lds-dual-ring'></div>;
+		return <div className='lds-dual-ring'></div>;
 	} else {
 		const pattern = /<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/\1>|<([A-Z][A-Z0-9]*).*?\/>/gi;
 		let body = data.body.match(pattern);

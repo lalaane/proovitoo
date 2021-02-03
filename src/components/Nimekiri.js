@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { dob } from '../helpers';
+import Pagination from './Pagination';
 
 const Nimekiri = () => {
 	const [data, setData] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [sorting, setSorting] = useState({ key: undefined, order: 0 });
 	const [originalData, setOriginalData] = useState(null);
+	const [loading, setLoading] = useState(false);
+
+	const [sorting, setSorting] = useState({ key: undefined, order: 0 });
+
 	const [clicked, setClicked] = useState(false);
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const [itemsPerPage] = useState(10);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -54,7 +60,6 @@ const Nimekiri = () => {
 				return sorted;
 			}
 			if (order === 1) {
-				console.log('key', key);
 				sorted.sort((a, b) => {
 					let valueA = a[keyy].toLowerCase();
 					let valueB = b[keyy].toLowerCase();
@@ -85,8 +90,58 @@ const Nimekiri = () => {
 		setData({ data });
 	};
 
+	const renderData = data => {
+		return data?.map(rida => {
+			let isikukood = rida.personal_code.toString();
+			let synniaeg = dob(isikukood);
+			let inff = rida.intro
+				.replace(/<\/?[^>]+(>|$)/g, '')
+				.split(' ')
+				.slice(0, 38)
+				.join(' ');
+			return (
+				<>
+					<tr
+						className={`info ${clicked === rida.id ? 'activeRow' : ''}`}
+						key={rida.id}
+						onClick={() => toggle(`${rida.id}`)}
+					>
+						<td>{rida.firstname}</td>
+						<td>{rida.surname}</td>
+						<td>{rida.sex === 'm' ? 'Mees' : rida.sex === 'f' ? 'Naine' : ''}</td>
+						<td>{synniaeg}</td>
+						<td>{rida.phone}</td>
+					</tr>
+
+					{clicked === `${rida.id}` ? (
+						<tr>
+							<td colSpan={5}>
+								<div className='additionalInfoRow'>
+									<div className='additionalPic'>
+										<img src={rida.images[0].small} alt='rida.images[0].alt' />
+									</div>
+									<div className='additionalInfo'>
+										<p>{inff}...</p>
+									</div>
+								</div>
+							</td>
+						</tr>
+					) : null}
+				</>
+			);
+		});
+	};
+
+	//for pagination
+	//get current rows
+	const indexOfLastItem = currentPage * itemsPerPage;
+	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+	const currentItems = data?.data.slice(indexOfFirstItem, indexOfLastItem);
+	//change page
+	const paginate = pageNumber => setCurrentPage(pageNumber);
+
 	if (loading) {
-		return <div class='lds-dual-ring'></div>;
+		return <div className='lds-dual-ring'></div>;
 	}
 	return (
 		<div>
@@ -107,48 +162,14 @@ const Nimekiri = () => {
 						<th onClick={() => sortSmth('phone')}>telefon</th>
 					</tr>
 				</thead>
-				<tbody>
-					{data?.data.map(rida => {
-						let isikukood = rida.personal_code.toString();
-						let synniaeg = dob(isikukood);
-						let inff = rida.intro
-							.replace(/<\/?[^>]+(>|$)/g, '')
-							.split(' ')
-							.slice(0, 38)
-							.join(' ');
-						return (
-							<>
-								<tr
-									className={`info ${clicked === rida.id ? 'activeRow' : ''}`}
-									key={rida.id}
-									onClick={() => toggle(`${rida.id}`)}
-								>
-									<td>{rida.firstname}</td>
-									<td>{rida.surname}</td>
-									<td>{rida.sex === 'm' ? 'Mees' : rida.sex === 'f' ? 'Naine' : ''}</td>
-									<td>{synniaeg}</td>
-									<td>{rida.phone}</td>
-								</tr>
-
-								{clicked === `${rida.id}` ? (
-									<tr>
-										<td colSpan={5}>
-											<div className='additionalInfoRow'>
-												<div className='additionalPic'>
-													<img src={rida.images[0].small} alt='rida.images[0].alt' />
-												</div>
-												<div className='additionalInfo'>
-													<p>{inff}...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-								) : null}
-							</>
-						);
-					})}
-				</tbody>
+				<tbody>{renderData(currentItems)}</tbody>
 			</table>
+			<Pagination
+				itemsPerPage={itemsPerPage}
+				totalItems={data?.data.length}
+				paginate={paginate}
+				currentPage={currentPage}
+			/>
 		</div>
 	);
 };
