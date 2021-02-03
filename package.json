@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
     "netlify-cli": "^3.4.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -15,6 +16,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://proovitoo.twn.ee/",
   "eslintConfig": {
     "extends": [
       "react-app",
