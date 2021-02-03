@@ -37,8 +37,8 @@ const Nimekiri = () => {
 	const sortStrings = keyy => {
 		const ascSort = () => {
 			sorted.sort((a, b) => {
-				let valueA = a[keyy].toLowerCase();
-				let valueB = b[keyy].toLowerCase();
+				let valueA = a[keyy].toString().toLowerCase();
+				let valueB = b[keyy].toString().toLowerCase();
 				if (valueA < valueB) {
 					return -1;
 				}
@@ -61,8 +61,8 @@ const Nimekiri = () => {
 			}
 			if (order === 1) {
 				sorted.sort((a, b) => {
-					let valueA = a[keyy].toLowerCase();
-					let valueB = b[keyy].toLowerCase();
+					let valueA = a[keyy].toString().toLowerCase();
+					let valueB = b[keyy].toString().toLowerCase();
 					if (valueA > valueB) {
 						return -1;
 					}
@@ -89,6 +89,37 @@ const Nimekiri = () => {
 		const data = sortStrings(keyy);
 		setData({ data });
 	};
+	// const sortDob = keyy => {
+	// 	const { key, order } = sorting;
+	// 	let sorted = [...data.data];
+	// 	let vanemad = [];
+	// 	let nooremad = [];
+	// 	for (let i = 0; i < sorted.length; i++) {
+	// 		if (sorted[i].personal_code.toString()[0] === '5' || sorted[i].personal_code.toString()[0] === '6') {
+	// 			nooremad.push(parseInt(sorted[i].personal_code.toString().slice(1)));
+	// 		}
+	// 		if (sorted[i].personal_code.toString()[0] === '3' || sorted[i].personal_code.toString()[0] === '4') {
+	// 			vanemad.push(parseInt(sorted[i].personal_code.toString().slice(1)));
+	// 		}
+	// 	}
+
+	// 	if (key === keyy) {
+	// 		console.log('aga siia');
+	// 		if (order === 0) {
+	// 			vanemad.sort((a, b) => a - b);
+	// 			nooremad.sort((a, b) => a - b);
+	// 			sorted = vanemad.concat(nooremad);
+	// 			console.log('joudis siia');
+	// 			return sorted;
+	// 		}
+	// 	} else {
+	// 		vanemad.sort((a, b) => a - b);
+	// 		nooremad.sort((a, b) => a - b);
+	// 		sorted = vanemad.concat(nooremad);
+	// 		console.log('joudis siia else');
+	// 		return sorted;
+	// 	}
+	// };
 
 	const renderData = data => {
 		return data?.map(rida => {
@@ -158,7 +189,7 @@ const Nimekiri = () => {
 						</th>
 						<th onClick={() => sortSmth('surname')}>perekonnanimi</th>
 						<th onClick={() => sortSmth('sex')}>sugu</th>
-						<th>sünnikuupäev</th>
+						<th onClick={() => sortSmth('personal_code')}>sünnikuupäev</th>
 						<th onClick={() => sortSmth('phone')}>telefon</th>
 					</tr>
 				</thead>

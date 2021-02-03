@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
-	const [pageNumberLimit, setPageNumberLimit] = useState(5);
+	const [pageNumberLimit] = useState(5);
 	const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
 	const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
 
@@ -15,6 +15,22 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
 		event.preventDefault();
 		paginate(number);
 	};
+	const handleNext = (event, number) => {
+		event.preventDefault();
+		paginate(number);
+		if (currentPage + 1 > maxPageNumberLimit) {
+			setmaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
+			setminPageNumberLimit(minPageNumberLimit + pageNumberLimit);
+		}
+	};
+	const handlePrev = (event, number) => {
+		event.preventDefault();
+		paginate(number);
+		if ((currentPage - 1) % pageNumberLimit === 0) {
+			setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
+			setminPageNumberLimit(minPageNumberLimit - pageNumberLimit);
+		}
+	};
 
 	const renderPageNumbers = pageNumbers.map(number => {
 		if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
@@ -22,7 +38,7 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
 				<li
 					key={number}
 					onClick={event => handleClick(event, number)}
-					className={currentPage === number ? 'activeNum' : null}
+					className={`pageNumbers ${currentPage === number ? 'activeNum' : null}`}
 				>
 					{number}
 				</li>
@@ -32,19 +48,15 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
 		}
 	});
 
-	const handleNext = () => {
-		console.log('handling next');
-	};
-
 	return (
-		<div>
+		<div className='pagination'>
 			<ul className='pageNums'>
-				<li onClick={handleNext}>
-					<i class='fas fa-chevron-left pageBtns'></i>
+				<li onClick={currentPage > 1 ? event => handlePrev(event, currentPage - 1) : null}>
+					<i className='fas fa-chevron-left pageBtns'></i>
 				</li>
 				{renderPageNumbers}
-				<li>
-					<i class='fas fa-chevron-right pageBtns'></i>
+				<li onClick={currentPage < pageNumbers.length ? event => handleNext(event, currentPage + 1) : null}>
+					<i className='fas fa-chevron-right pageBtns'></i>
 				</li>
 			</ul>
 		</div>

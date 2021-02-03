@@ -22,7 +22,7 @@ body {
 
 .App {
 	margin: 0 auto;
-	height: 100%;
+	min-height: 100vh;
 	max-width: 1200px;
 	background-color: var(--lightBg);
 	color: var(--textMain);
@@ -194,6 +194,12 @@ tr:not(:last-of-type) {
 }
 
 /* pagination */
+
+.pagination {
+	display: flex;
+	justify-content: center;
+}
+
 .pageNums {
 	list-style: none;
 	color: var(--lightText);
@@ -212,7 +218,7 @@ tr:not(:last-of-type) {
 	justify-content: center;
 }
 
-.pageNums li:hover {
+.pageNumbers:hover {
 	border: var(--lightText) 2px solid;
 }
 
