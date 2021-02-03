@@ -94,3 +94,25 @@ class Container extends React.Component {
 ReactDOM.render(<Container />, document.getElementById('root'));
 
 export default Container;
+
+
+
+<td>
+											<div className='additionalInfoRow'>
+												<div className='additionalPic'>
+													<img src={rida.images[0].small} alt='rida.images[0].alt' height='120px' />
+												</div>
+											</div>
+										</td>
+										<td>
+											<div className='additionalInfo'>
+												<p>
+													{rida.intro
+														.replace(/<\/?[^>]+(>|$)/g, '')
+														.split(' ')
+														.slice(0, 38)
+														.join(' ')}
+													...
+												</p>
+											</div>
+										</td>

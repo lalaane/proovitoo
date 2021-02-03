@@ -3,19 +3,30 @@ import { dob } from '../helpers';
 
 const Nimekiri = () => {
 	const [data, setData] = useState(null);
+	const [loading, setLoading] = useState(false);
 	const [sorting, setSorting] = useState({ key: undefined, order: 0 });
 	const [originalData, setOriginalData] = useState(null);
+	const [clicked, setClicked] = useState(false);
 
 	useEffect(() => {
-		async function fetchData() {
+		const fetchData = async () => {
+			setLoading(true);
 			let res = await fetch('http://proovitoo.twn.ee/api/list.json');
 			let dataa = await res.json();
 			let data = dataa.list;
 			setData({ data });
 			setOriginalData({ data });
-		}
+			setLoading(false);
+		};
 		fetchData();
 	}, []);
+
+	const toggle = index => {
+		if (clicked === index) {
+			return setClicked(null);
+		}
+		setClicked(index);
+	};
 
 	const sortStrings = keyy => {
 		const ascSort = () => {
@@ -28,7 +39,7 @@ const Nimekiri = () => {
 				if (valueA > valueB) {
 					return 1;
 				}
-				// values are equal
+				// if values are equal
 				return 0;
 			});
 			setSorting({ key: keyy, order: 1 });
@@ -36,6 +47,7 @@ const Nimekiri = () => {
 		};
 		const { key, order } = sorting;
 		let sorted = [...data.data];
+		//checkin key jargi mis jarjekorras sortida
 		if (key === keyy) {
 			if (order === 0) {
 				sorted = ascSort();
@@ -52,7 +64,6 @@ const Nimekiri = () => {
 					if (valueA < valueB) {
 						return 1;
 					}
-					// values are equal
 					return 0;
 				});
 				setSorting({ key: keyy, order: 2 });
@@ -74,6 +85,9 @@ const Nimekiri = () => {
 		setData({ data });
 	};
 
+	if (loading) {
+		return <div class='lds-dual-ring'></div>;
+	}
 	return (
 		<div>
 			<h1 className='mainTitle'>nimekiri</h1>
@@ -97,15 +111,39 @@ const Nimekiri = () => {
 					{data?.data.map(rida => {
 						let isikukood = rida.personal_code.toString();
 						let synniaeg = dob(isikukood);
+						let inff = rida.intro
+							.replace(/<\/?[^>]+(>|$)/g, '')
+							.split(' ')
+							.slice(0, 38)
+							.join(' ');
 						return (
 							<>
-								<tr className='info' key={rida.id}>
+								<tr
+									className={`info ${clicked === rida.id ? 'activeRow' : ''}`}
+									key={rida.id}
+									onClick={() => toggle(`${rida.id}`)}
+								>
 									<td>{rida.firstname}</td>
 									<td>{rida.surname}</td>
 									<td>{rida.sex === 'm' ? 'Mees' : rida.sex === 'f' ? 'Naine' : ''}</td>
 									<td>{synniaeg}</td>
 									<td>{rida.phone}</td>
 								</tr>
+
+								{clicked === `${rida.id}` ? (
+									<tr>
+										<td colSpan={5}>
+											<div className='additionalInfoRow'>
+												<div className='additionalPic'>
+													<img src={rida.images[0].small} alt='rida.images[0].alt' />
+												</div>
+												<div className='additionalInfo'>
+													<p>{inff}...</p>
+												</div>
+											</div>
+										</td>
+									</tr>
+								) : null}
 							</>
 						);
 					})}

@@ -10,7 +10,7 @@ const Article = () => {
 	}, []);
 
 	if (data === null) {
-		return <p>No data</p>;
+		return <div class='lds-dual-ring'></div>;
 	} else {
 		const pattern = /<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/\1>|<([A-Z][A-Z0-9]*).*?\/>/gi;
 		let body = data.body.match(pattern);
@@ -18,7 +18,7 @@ const Article = () => {
 			<article className='article'>
 				<h1 className='mainTitle'>{data.title}</h1>
 				<h2 className='introText'>{data.intro.replace(/<\/?[^>]+(>|$)/g, '')}</h2>
-				<img src={data.images[0].medium} alt={data.images[0].alt} width='780px' />
+				<img src={data.images[0].medium} alt={data.images[0].alt} className='articleImg' />
 				<div>
 					{body.map((p, i) => (
 						<p className='mainText' key={i}>
