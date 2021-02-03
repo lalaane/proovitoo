@@ -17,7 +17,7 @@ const Nimekiri = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true);
-			let res = await fetch('http://proovitoo.twn.ee/api/list.json');
+			let res = await fetch('https://cors-anywhere.herokuapp.com/http://proovitoo.twn.ee/api/list.json');
 			let dataa = await res.json();
 			let data = dataa.list;
 			setData({ data });
