@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const Article = () => {
 	const [data, setData] = useState(null);
+
 	const apiUrl = 'https://cors-anywhere.herokuapp.com/http://proovitoo.twn.ee/api/article.json';
 	const getData = () => fetch(`${apiUrl}`).then(res => res.json());
 
